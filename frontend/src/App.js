@@ -5,11 +5,13 @@ import Footer from "./component/Footer";
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Header />
-      <Outlet />
+      <main className="min-h-[calc(100vh-56px)] pt-16">
+        <Outlet />
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

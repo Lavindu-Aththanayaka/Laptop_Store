@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import SummaryApi from "./common";
 import Context from "./context";
 import { useDispatch } from "react-redux";
-import { setUserDetails } from "./store/userSlice";
+import { setUserDetails } from "./store/usreSlice";
 
 function App() {
   const dispatch = useDispatch();

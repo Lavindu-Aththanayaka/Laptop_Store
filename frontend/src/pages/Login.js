@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import LoginIcon from "../New folder/lock_9164513.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-const Login = () => {
-  const [showPassword, setShowPasswors] = useState(false);
+import SummaryApi from "../common";
+import { toast } from "react-toastify";
+import Context from "../context";
 
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const { fetchUserDetails, fetchUserAddToCart } = useContext(Context);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
     setData((preve) => {
       return {
         ...preve,
@@ -21,13 +27,37 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const dataResponse = await fetch(SummaryApi.signIn.url, {
+      method: SummaryApi.signIn.method,
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const dataApi = await dataResponse.json();
+
+    if (dataApi.success) {
+      toast.success(dataApi.message);
+      navigate("/");
+      fetchUserDetails();
+      fetchUserAddToCart();
+    }
+
+    if (dataApi.error) {
+      toast.error(dataApi.message);
+    }
   };
-  console.log("data", data);
+
+  console.log("data login", data);
+
   return (
     <section id="login">
-      <div className="mx-auto container pt-12">
+      <div className="mx-auto container p-4">
         <div className="bg-custom-dark-or p-5 w-full max-w-sm mx-auto">
           <div className="w-20 h-20 mx-auto">
             <img src={LoginIcon} alt="login icons" />
@@ -54,16 +84,22 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="enter password"
-                  name="password"
                   value={data.password}
+                  name="password"
                   onChange={handleOnChange}
                   className="w-full h-full outline-none bg-transparent"
                 />
                 <div
                   className="cursor-pointer text-xl"
-                  onClick={() => setShowPasswors((prev) => !prev)}
+                  onClick={() => setShowPassword((preve) => !preve)}
                 >
-                  <span>{showPassword ? <FaEyeSlash /> : <FaEye />}</span>
+                  <span>
+                    {showPassword ? (
+                      <FaEyeSlash className="text-custom-dark-or" />
+                    ) : (
+                      <FaEye className="text-custom-dark-or" />
+                    )}
+                  </span>
                 </div>
               </div>
               <Link

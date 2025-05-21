@@ -4,12 +4,12 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import imageTobase64 from "../helpers/imageTobase64";
-import { toast } from "react-toastify";
 import SummaryApi from "../common";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setshowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -17,9 +17,11 @@ const SignUp = () => {
     confirmPassword: "",
     profilePic: "",
   });
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
     setData((preve) => {
       return {
         ...preve,
@@ -27,6 +29,7 @@ const SignUp = () => {
       };
     });
   };
+
   const handleUploadPic = async (e) => {
     const file = e.target.files[0];
 
@@ -39,7 +42,7 @@ const SignUp = () => {
       };
     });
   };
-  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -53,10 +56,12 @@ const SignUp = () => {
       });
 
       const dataApi = await dataResponse.json();
+
       if (dataApi.success) {
         toast.success(dataApi.message);
         navigate("/login");
       }
+
       if (dataApi.error) {
         toast.error(dataApi.message);
       }
@@ -64,7 +69,7 @@ const SignUp = () => {
       toast.error("Please check password and confirm password");
     }
   };
-  console.log("data", data);
+
   return (
     <section id="signup">
       <div className="mx-auto container p-4">
@@ -146,22 +151,22 @@ const SignUp = () => {
 
             <div>
               <label className="text-custom-dark-orange">
-                Confirm Password :
+                Confirm Password :{" "}
               </label>
               <div className="bg-custom-dark-ora p-2 flex">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="enter confirm password"
-                  required
-                  name="confirmPassword"
                   value={data.confirmPassword}
+                  name="confirmPassword"
                   onChange={handleOnChange}
+                  required
                   className="w-full h-full outline-none bg-transparent"
                 />
 
                 <div
                   className="cursor-pointer text-xl"
-                  onClick={() => setshowConfirmPassword((preve) => !preve)}
+                  onClick={() => setShowConfirmPassword((preve) => !preve)}
                 >
                   <span>
                     {showConfirmPassword ? (
